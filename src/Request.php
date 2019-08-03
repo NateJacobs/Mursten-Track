@@ -5,6 +5,7 @@ namespace NateJacobs\MurstenTrack;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
 use NateJacobs\MurstenTrack\Exceptions\AuthException;
+use NateJacobs\MurstenTrack\Exceptions\ResponseException;
 use NateJacobs\MurstenTrack\Exceptions\MissingParamsException;
 
 class Request
