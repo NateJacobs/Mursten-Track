@@ -81,6 +81,36 @@ class Set extends Request
 		}
 	}
 
+	public function setCollectionQuantity($id = null, $options)
+	{
+		if (is_null($id) || '' === $id) {
+			return Utilities::missingIDParam();
+		}
+
+		if (false === is_array($options)) {
+			throw new MissingParamsException('The options provided must be an array.');
+		}
+
+		if (false === isset($options['qtyOwned'])) {
+			return Utilities::missingValue('How many of this set do you own? You must pass qtyOwned.');
+		}
+
+		$defaults = [
+			'setID' => $id,
+		];
+
+		if (is_array($options)) {
+			$options = array_merge( $defaults, $options );
+		}
+
+		try {
+			$response = $this->request('setCollection_qtyOwned', 'get', $options);
+			return $this->createReturnObject($response);
+		} catch(\Exception $e) {
+			return $e;
+		}
+	}
+
 	public function createReturnObject($response)
 	{
 		$response = is_array($response) ? $response : [$response];
