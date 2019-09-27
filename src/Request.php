@@ -75,7 +75,8 @@ class Request
 		if (in_array($response->getStatusCode(), [200, 201, 204]) ) {
 			$xml = new \SimpleXMLElement($response->getBody());
 			$json = json_decode(json_encode((array)$xml),TRUE);
-			return $json['sets'];
+			$key = array_key_first($json);
+			return $json[$key];
 		} else {
 			throw new Exception('There was a problem with your request.');
 		}
