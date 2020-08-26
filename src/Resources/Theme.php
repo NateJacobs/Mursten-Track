@@ -24,7 +24,7 @@ class Theme extends Request
 		}
 
 		try {
-			$response = $this->request('getSubthemes', 'get', ['Theme' => $theme]);
+			$response = $this->request('getSubthemes', 'get', ['parentTheme' => $theme]);
 			return $this->createReturnObject($response);
 		} catch(\Exception $e) {
 			return $e;
@@ -34,8 +34,8 @@ class Theme extends Request
 	public function createReturnObject($response)
 	{
 		$response = is_array($response) ? $response : [$response];
-
-		foreach ($response as $object) {
+		$loop = isset($response['themes']) ? $response['themes'] : $response['subthemes'] ;
+		foreach ($loop as $object) {
 			foreach ($object as $key => $theme) {
 				if (is_array($theme) && count($theme) === 0) {
 					$theme = '';

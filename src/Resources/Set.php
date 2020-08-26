@@ -24,6 +24,7 @@ class Set extends Request
 			'pageSize' => 20,
 			'pageNumber' => 1,
 			'userName' => '',
+			'extendedData' => 0,
 		];
 
 		if (false === is_array($options)) {
@@ -104,8 +105,8 @@ class Set extends Request
 		}
 
 		try {
-			$response = $this->request('setCollection_qtyOwned', 'get', $options);
-			return $this->createReturnObject($response);
+			$response = $this->request('setCollection', 'get', $options);
+			return $response['status'];
 		} catch(\Exception $e) {
 			return $e;
 		}
@@ -115,7 +116,7 @@ class Set extends Request
 	{
 		$response = is_array($response) ? $response : [$response];
 
-		foreach ($response as $object) {
+		foreach ($response['sets'] as $object) {
 			foreach ($object as $key => $set) {
 				if (is_array($set) && count($set) === 0) {
 					$set = '';

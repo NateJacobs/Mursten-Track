@@ -26,7 +26,7 @@ class Request
 		// build API request
 		$request = new \GuzzleHttp\Psr7\Request($method, $path);
 		$client = new Client(
-			['base_uri' => 'https://brickset.com/api/v2.asmx/']
+			['base_uri' => 'https://brickset.com/api/v3.asmx/']
 		);
 
 		// send API request
@@ -34,8 +34,9 @@ class Request
 			$response = $client->send($request, ['query' => $options]);
 
 			try {
-				$sets = $this->check_brickset_status($response);
-				return $this->checkIfMultiArray($sets);
+				$test = $this->check_brickset_status($response);
+var_dump($test);
+				return $test;
 			} catch(\Exception $e) {
 				throw new ResponseException($e);
 			}
@@ -58,11 +59,26 @@ class Request
 	private function build_request_params($params)
 	{
 		$defaults = [
-			'apiKey' => getenv('MURSTEN_TRACK_KEY')
+			'apiKey' => getenv('MURSTEN_TRACK_KEY'),
+			'userHash' => isset($params['userHash']) ? $params['userHash'] : '',
 		];
 
+		if (isset($params['parentTheme'])) {
+			$defaults['Theme'] = $params['parentTheme'];
+		}
+
+		if (isset($params['setID'])) {
+			$defaults['setID'] = $params['setID'];
+		}
+
 		if (is_array($params)) {
-			$options = array_merge( $defaults, $params );
+			if (isset($params['userHash'])) {
+				unset($params['userHash']);
+			}
+
+			$json_params = ['params' => \json_encode($params)];
+
+			$options = array_merge( $defaults, $json_params );
 		} else {
 			throw new MissingParamsException('The options provided must be an array.');
 		}
@@ -73,22 +89,9 @@ class Request
 	private function check_brickset_status($response)
 	{
 		if (in_array($response->getStatusCode(), [200, 201, 204]) ) {
-			$xml = new \SimpleXMLElement($response->getBody());
-			$json = json_decode(json_encode((array)$xml),TRUE);
-			$key = array_key_first($json);
-			return $json[$key];
+			return json_decode($response->getBody()->getContents(),TRUE);
 		} else {
 			throw new Exception('There was a problem with your request.');
-		}
-	}
-
-	private function checkIfMultiArray($sets)
-	{
-		if (isset($sets[0]) && is_array($sets[0])) {
-			return $sets;
-		} else {
-			$sets_array[] = $sets;
-			return $sets_array;
 		}
 	}
 }

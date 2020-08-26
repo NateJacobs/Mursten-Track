@@ -12,27 +12,25 @@ class Set
 		$this->images = $this->setImages($set);
 		$this->prices = $this->setPrices($set);
 		$this->userCollection = $this->setCollection($set);
-		$this->name = $set['name'];
-		$this->year = $set['year'];
-		$this->pieces = $set['pieces'];
-		$this->minifigs = $set['minifigs'];
-		$this->bricksetURL = $set['bricksetURL'];
-		$this->released = $set['released'];
-		$this->ownedByTotal = $set['ownedByTotal'];
-		$this->wantedByTotal = $set['wantedByTotal'];
-		$this->USDateAddedToSAH = $set['USDateAddedToSAH'];
-		$this->USDateRemovedFromSAH = $set['USDateRemovedFromSAH'];
-		$this->rating = $set['rating'];
-		$this->reviewCount = $set['reviewCount'];
-		$this->packagingType = $set['packagingType'];
-		$this->availability = $set['availability'];
-		$this->instructionsCount = $set['instructionsCount'];
-		$this->ageMin = $set['ageMin'];
-		$this->ageMax = $set['ageMax'];
-		$this->category = $set['category'];
-		$this->EAN = $set['EAN'];
-		$this->UPC = $set['UPC'];
-		$this->lastUpdated = $set['lastUpdated'];
+		$this->name = isset($set['name']) ? $set['name'] : '';
+		$this->year = isset($set['year']) ? $set['year'] : '';
+		$this->pieces = isset($set['pieces']) ? $set['pieces'] : '';
+		$this->minifigs = isset($set['minifigs']) ? $set['minifigs'] : '';
+		$this->bricksetURL = isset($set['bricksetURL']) ? $set['bricksetURL'] : '';
+		$this->released = isset($set['released']) ? $set['released'] : '';
+		$this->ownedByTotal = isset($set['collections']['ownedBy']) ? $set['collections']['ownedBy'] : '';
+		$this->wantedByTotal = isset($set['collections']['wantedBy']) ? $set['collections']['wantedBy'] : '';
+		$this->rating = isset($set['rating']) ? $set['rating'] : '';
+		$this->reviewCount = isset($set['reviewCount']) ? $set['reviewCount'] : '';
+		$this->packagingType = isset($set['packagingType']) ? $set['packagingType'] : '';
+		$this->availability = isset($set['availability']) ? $set['availability'] : '';
+		$this->instructionsCount = isset($set['instructionsCount']) ? $set['instructionsCount'] : '';
+		$this->ageMin = isset($set['ageRange']['min']) ? $set['ageRange']['min'] : '';
+		$this->ageMax = isset($set['ageRange']['max']) ? $set['ageRange']['max'] : '';
+		$this->category = isset($set['category']) ? $set['category'] : '';
+		$this->EAN = isset($set['barcode']['EAN']) ? $set['barcode']['EAN'] : '';
+		$this->UPC = isset($set['barcode']['UPC']) ? $set['barcode']['UPC'] : '';
+		$this->lastUpdated = isset($set['lastUpdated']) ? $set['lastUpdated'] : '';
 
 		return $this;
 	}
@@ -40,61 +38,74 @@ class Set
 	private function setNumbers($set)
 	{
 		return [
-			'setID' => $set["setID"],
-			'number' => $set["number"],
-			'numberVariant' => $set["numberVariant"],
+			'setID' => isset($set['setID']) ? $set['setID'] : '',
+			'number' => isset($set['number']) ? $set['number'] : '',
+			'numberVariant' => isset($set['numberVariant']) ? $set['numberVariant'] : '',
 		];
 	}
 
 	private function setThemes($set)
 	{
 		return [
-			'theme' => $set["theme"],
-			'themeGroup' => $set["themeGroup"],
-			'subtheme' => $set["subtheme"],
+			'theme' => isset($set['theme']) ? $set['theme'] : '',
+			'themeGroup' => isset($set['themeGroup']) ? $set['themeGroup'] : '',
+			'subtheme' => isset($set['subtheme'])? $set['subtheme'] : '',
 		];
 	}
 
 	private function setDimensions($set)
 	{
 		return [
-			'height' => $set["height"],
-			'width' => $set["width"],
-			'depth' => $set["depth"],
-			'weight' => $set["weight"],
+			'height' => isset($set['dimensions']['height']) ? $set['dimensions']['height'] : '',
+			'width' => isset($set['dimensions']['width']) ? $set['dimensions']['width'] : '',
+			'depth' => isset($set['dimensions']['depth']) ? $set['dimensions']['depth'] : '',
+			'weight' => isset($set['dimensions']['weight']) ? $set['dimensions']['weight'] : '',
 		];
 	}
 
 	private function setImages($set)
 	{
 		return [
-			'image' => $set["image"],
-			'imageFilename' => $set["imageFilename"],
-			'thumbnailURL' => $set["thumbnailURL"],
-			'largeThumbnailURL' => $set["largeThumbnailURL"],
-			'imageURL' => $set["imageURL"],
-			'additionalImageCount' => $set["additionalImageCount"],
+			'thumbnailURL' => isset($set['image']['thumbnailURL']) ? $set['image']['thumbnailURL'] : '',
+			'imageURL' => isset($set['image']['imageURL']) ? $set['image']['imageURL'] : '',
+			'additionalImageCount' => isset($set['additionalImageCount']) ? : '',
 		];
 	}
 
 	private function setPrices($set)
 	{
 		return [
-			'UKRetailPrice' => $set["UKRetailPrice"],
-			'USRetailPrice' => $set["USRetailPrice"],
-			'CARetailPrice' => $set["CARetailPrice"],
-			'EURetailPrice' => $set["EURetailPrice"],
+			'UK' => [
+				'retailPrice' => isset($set['LEGOCom']['UK']['retailPrice']) ? $set['LEGOCom']['UK']['retailPrice'] : '',
+				'dateFirstAvailable' => isset($set['LEGOCom']['UK']['dateFirstAvailable']) ? $set['LEGOCom']['UK']['dateFirstAvailable'] : '',
+				'dateLastAvailable' => isset($set['LEGOCom']['UK']['dateLastAvailable']) ? $set['LEGOCom']['UK']['dateLastAvailable'] : '',
+			],
+			'US' => [
+				'retailPrice' => isset($set['LEGOCom']['US']['retailPrice']) ? $set['LEGOCom']['US']['retailPrice'] : '',
+				'dateFirstAvailable' => isset($set['LEGOCom']['US']['dateFirstAvailable']) ? $set['LEGOCom']['US']['dateFirstAvailable'] : '',
+				'dateLastAvailable' => isset($set['LEGOCom']['US']['dateLastAvailable']) ? $set['LEGOCom']['US']['dateLastAvailable'] : '',
+			],
+			'CA' => [
+				'retailPrice' => isset($set['LEGOCom']['CA']['retailPrice']) ? $set['LEGOCom']['CA']['retailPrice'] : '',
+				'dateFirstAvailable' => isset($set['LEGOCom']['CA']['dateFirstAvailable']) ? $set['LEGOCom']['CA']['dateFirstAvailable'] : '',
+				'dateLastAvailable' => isset($set['LEGOCom']['CA']['dateLastAvailable']) ? $set['LEGOCom']['CA']['dateLastAvailable'] : '',
+			],
+			'DE' => [
+				'retailPrice' => isset($set['LEGOCom']['DE']['retailPrice']) ? $set['LEGOCom']['DE']['retailPrice'] : '',
+				'dateFirstAvailable' => isset($set['LEGOCom']['DE']['dateFirstAvailable']) ? $set['LEGOCom']['DE']['dateFirstAvailable'] : '',
+				'dateLastAvailable' => isset($set['LEGOCom']['DE']['dateLastAvailable']) ? $set['LEGOCom']['DE']['dateLastAvailable'] : '',
+			]
 		];
 	}
 
 	private function setCollection($set)
 	{
 		return [
-			'owned' => $set["owned"],
-			'wanted' => $set["wanted"],
-			'quantityOwned' => $set["qtyOwned"],
-			'userRating' => $set["userRating"],
-			'AdvancedCollectionDataCount' => $set["ACMDataCount"],
+			'owned' => isset($set['collection']['owned']) ? $set['collection']['owned'] : '',
+			'wanted' => isset($set['collection']['wanted']) ? $set['collection']['wanted'] : '',
+			'quantityOwned' => isset($set['collection']['qtyOwned']) ? $set['collection']['qtyOwned'] : '',
+			'userRating' => isset($set['collection']['rating']) ? $set['collection']['rating'] : '',
+			'notes' => isset($set['collection']['notes']) ? $set['collection']['notes'] : '',
 		];
 	}
 }
