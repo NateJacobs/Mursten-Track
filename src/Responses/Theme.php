@@ -4,6 +4,13 @@ namespace NateJacobs\MurstenTrack\Responses;
 
 class Theme
 {
+	public $theme;
+	public $subtheme;
+	public $setCount;
+	public $subthemeCount;
+	public $startYear;
+	public $endYear;
+
 	public function __construct($theme)
 	{
 		$this->theme = $theme['theme'];

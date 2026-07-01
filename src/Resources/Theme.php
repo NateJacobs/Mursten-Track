@@ -4,6 +4,7 @@ namespace NateJacobs\MurstenTrack\Resources;
 
 use NateJacobs\MurstenTrack\Request;
 use NateJacobs\MurstenTrack\Responses\Theme as ThemeResponse;
+use NateJacobs\MurstenTrack\Exceptions\MissingParamsException;
 
 class Theme extends Request
 {

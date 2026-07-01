@@ -10,6 +10,8 @@ use GuzzleHttp\Exception\ServerException;
  */
 class ResponseException extends \Exception
 {
+	public $errorDetails;
+
 	public function __construct($e)
 	{
 		$message = $e->getMessage();
@@ -20,7 +22,7 @@ class ResponseException extends \Exception
             $message .= ' [details] ' . $this->errorDetails;
         } elseif ($e instanceof ServerException) {
             $message .= ' [details] Brickset may be experiencing internal issues or undergoing scheduled maintenance.';
-		} elseif (! $e->hasResponse()) {
+		} elseif ($e instanceof RequestException && ! $e->hasResponse()) {
             $request = $e->getRequest();
             $message .= ' [url] ' . $request->getUri();
             $message .= ' [http method] ' . $request->getMethod();

@@ -4,6 +4,32 @@ namespace NateJacobs\MurstenTrack\Responses;
 
 class Set
 {
+	public $itemNumbers;
+	public $themeDetails;
+	public $dimensions;
+	public $images;
+	public $prices;
+	public $userCollection;
+	public $name;
+	public $year;
+	public $pieces;
+	public $minifigs;
+	public $bricksetURL;
+	public $released;
+	public $ownedByTotal;
+	public $wantedByTotal;
+	public $rating;
+	public $reviewCount;
+	public $packagingType;
+	public $availability;
+	public $instructionsCount;
+	public $ageMin;
+	public $ageMax;
+	public $category;
+	public $EAN;
+	public $UPC;
+	public $lastUpdated;
+
 	public function __construct($set)
 	{
 		$this->itemNumbers = $this->setNumbers($set);
@@ -68,7 +94,7 @@ class Set
 		return [
 			'thumbnailURL' => isset($set['image']['thumbnailURL']) ? $set['image']['thumbnailURL'] : '',
 			'imageURL' => isset($set['image']['imageURL']) ? $set['image']['imageURL'] : '',
-			'additionalImageCount' => isset($set['additionalImageCount']) ? : '',
+			'additionalImageCount' => isset($set['additionalImageCount']) ? $set['additionalImageCount'] : '',
 		];
 	}
 

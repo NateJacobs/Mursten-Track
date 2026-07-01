@@ -4,6 +4,7 @@ namespace NateJacobs\MurstenTrack;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Exception\RequestException;
 use NateJacobs\MurstenTrack\Exceptions\AuthException;
 use NateJacobs\MurstenTrack\Exceptions\ResponseException;
 use NateJacobs\MurstenTrack\Exceptions\MissingParamsException;
@@ -24,18 +25,16 @@ class Request
 		$options = $this->build_request_params($params);
 
 		// build API request
-		$request = new \GuzzleHttp\Psr7\Request($method, $path);
 		$client = new Client(
 			['base_uri' => 'https://brickset.com/api/v3.asmx/']
 		);
 
 		// send API request
 		try {
-			$response = $client->send($request, ['query' => $options]);
+			$response = $client->request($method, $path, ['query' => $options]);
 
 			try {
 				$test = $this->check_brickset_status($response);
-var_dump($test);
 				return $test;
 			} catch(\Exception $e) {
 				throw new ResponseException($e);
@@ -91,7 +90,7 @@ var_dump($test);
 		if (in_array($response->getStatusCode(), [200, 201, 204]) ) {
 			return json_decode($response->getBody()->getContents(),TRUE);
 		} else {
-			throw new Exception('There was a problem with your request.');
+			throw new \Exception('There was a problem with your request.');
 		}
 	}
 }

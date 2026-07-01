@@ -82,7 +82,7 @@ class Set extends Request
 		}
 	}
 
-	public function setCollectionQuantity($id = null, $options)
+	public function setCollectionQuantity($id = null, $options = [])
 	{
 		if (is_null($id) || '' === $id) {
 			return Utilities::missingIDParam();
